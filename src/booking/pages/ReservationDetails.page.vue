@@ -9,11 +9,15 @@ import { computed } from 'vue';
 import { toLocalDateTimeString } from '../utils/toLocalDateTimeString';
 import { ReservationsApiService } from '../services/reservations-api.service';
 import { ReservationRequest } from '../models/reservation.request';
+import FooterComponent from '../../public/components/Footer.component.vue';
+import { useRouter } from 'vue-router';
+import CreateCommentComponent from '../../locals/components/CreateComment.component.vue';
 
 const localsApiService = new LocalsApiService();
 const usersApiService = new UsersApiService();
 
 const authenticationStore = useAuthenticationStore();
+const router = useRouter();
 
 const reservation = ref({});
 const local = ref({});
@@ -42,13 +46,26 @@ const postponeReservation = async () => {
     reservation.value.startDate = toLocalDateTimeString(newStart);
     reservation.value.endDate = toLocalDateTimeString(newEnd);
 
-    const reservationsApiService = new ReservationsApiService()
+    const reservationsApiService = new ReservationsApiService();
     const updateReservationRequest = new ReservationRequest(reservation.value);
     await reservationsApiService.update(reservation.value.id, updateReservationRequest);
     alert('Reserva actualizada correctamente');
+    router.push('/calendar');
   } catch (error) {
     console.error('Error al posponer la reserva:', error);
     alert('Error al posponer la reserva. Por favor, inténtelo de nuevo más tarde.');
+  }
+};
+
+const cancelReservation = async () => {
+  try {
+    const reservationsApiService = new ReservationsApiService();
+    await reservationsApiService.delete(reservation.value.id);
+    alert('Reserva cancelada correctamente');
+    router.push('/calendar');
+  } catch (error) {
+    console.error('Error al cancelar la reserva:', error);
+    alert('Error al cancelar la reserva. Por favor, inténtelo de nuevo más tarde.');
   }
 };
 
@@ -81,7 +98,7 @@ const postponeReservation = async () => {
       </div>
 
       <!-- Panel lateral -->
-      <div class="flex flex-col justify-center gap-4 shadow-lg bg-white rounded-lg p-4 w-full md:w-1/3 max-h-120 overflow-y-auto">
+      <div class="flex flex-col justify-center gap-4 shadow-lg bg-white rounded-lg p-4 w-full md:w-1/3 max-h-180 overflow-y-auto">
         <h2 class="text-2xl font-semibold">Opciones:</h2>
         <div class="flex flex-col gap-5 text-xl">
           <RouterLink :to="`/comments/${local.id}`" class="text-[var(--primary-color)] hover:underline">
@@ -96,12 +113,11 @@ const postponeReservation = async () => {
           v-if="new Date(reservation.startDate) >= new Date() && reservation.isSubscribe && local.userId === userId" 
           class="flex flex-col gap-5 text-xl"
         >
-          <p class="text-(--primary-color)">Debido a que lo reservó un usuario premium, no se puede modificar</p>
+          <p class="text-(--primary-color)">Debido a que lo reservó un usuario premium, no se puede modificar el horario de reserva.</p>
         </div>
         <div v-else-if="new Date(reservation.startDate) >= new Date() && local.userId === userId" class="flex flex-col w-full gap-4">
           <h3 class="text-xl font-semibold">Modificar horario de reserva</h3>
           <p class="text-lg">Seleccione cuántos minutos desea posponer</p>
-
           <input
             type="number"
             v-model.number="postponeMinutes"
@@ -118,8 +134,26 @@ const postponeReservation = async () => {
           >
             Posponer
           </button>
+          
         </div>
+        <div v-if="new Date(reservation.startDate) >= new Date() && local.userId === userId" class="flex flex-col w-full gap-4">
+          <h3 class="text-xl font-semibold">Voucher de pago de reserva</h3>
+          <a :href="reservation.voucherImageUrl" target="_blank">
+            <img
+              v-if="reservation.voucherImageUrl"
+              :src="reservation.voucherImageUrl"
+              alt="Voucher de pago"
+              class="w-full h-40 object-cover rounded-lg cursor-zoom-in"
+            />
+          </a>
+          <button
+            @click="cancelReservation"
+            class="bg-(--primary-color) rounded-md py-5 text-white text-xl hover:cursor-pointer hover:bg-red-600 transition duration-300 ease-in-out"
+          >Cancelar reserva</button>
+        </div>
+        <CreateCommentComponent :localId="local.id" v-if="new Date(reservation.endDate) < new Date()" />
       </div>
     </div>
   </main>
+  <FooterComponent />
 </template>

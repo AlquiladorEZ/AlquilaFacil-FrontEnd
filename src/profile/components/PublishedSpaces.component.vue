@@ -25,6 +25,11 @@ onMounted(async () => {
     <h2 class="text-xl md:text-4xl font-bold text-center mb-6">
       Espacios publicados
     </h2>
+    <div class="w-full flex justify-center items-center">
+      <div v-if="locals.length === 0" class="w-full flex items-center justify-center">
+        <p class="text-lg text-center">No tienes espacios publicados aún.</p>
+      </div>
+    </div>  
     <div v-for="local in locals" :key="local.id" class="w-full px-10 py-4 bg-(--background-color) shadow-md rounded-lg flex items-center justify-between hover:cursor-pointer hover:shadow-2xl transition duration-300 ease-in-out" @click="$router.push(`/local/${local.id}`)">
       <div class="flex gap-4 w-full">
         <img :src="local.photoUrl" alt="Local Image" class="w-32 h-32 object-cover rounded-lg" />

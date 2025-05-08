@@ -6,12 +6,16 @@ import http from "@/shared/services/http-common.js";
 import { formatReservationDay } from "../utils/formatReservationDay";
 
 export class ReservationsApiService {
-  async create(localResource) {
-    const response = await http.post('/reservation', localResource);
+  async create(reservationResource) {
+    const response = await http.post('/reservation', reservationResource);
     return response.data;
   }
-  async update(id, localResource) {
-    const response = await http.put(`/reservation/${id}`, localResource);
+  async update(id, reservationResource) {
+    const response = await http.put(`/reservation/${id}`, reservationResource);
+    return response.data;
+  }
+  async delete(id) {
+    const response = await http.delete(`/reservation/${id}`);
     return response.data;
   }
   async getByUserId(userId) {
@@ -41,10 +45,10 @@ export class ReservationsApiService {
             ...reservation,
             start: formatReservationDay(reservation.startDate),
             end: formatReservationDay(reservation.endDate),
-            title: reservation.isSuscribed
+            title: reservation.isSubscribe
               ? 'Reserva de tu espacio por usuario premium'
               : 'Reserva de tu espacio',
-            calendarId: reservation.isSuscribed
+            calendarId: reservation.isSubscribe
               ? 'premiumUserLocalReservation'
               : 'localReservation',
           };

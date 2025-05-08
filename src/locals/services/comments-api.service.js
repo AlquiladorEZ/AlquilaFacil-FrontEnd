@@ -10,24 +10,23 @@ export class CommentsApiService {
     this.userApiService = new UsersApiService();
   }
   async getAllByLocalId(localId) {
-    return http.get(`/comments/local/${localId}`).then((response) => {
-      if(response.data) {
-        return Promise.all(response.data.map(comment => {
-          return this.userApiService.getUsernameById(comment.userId).then(usernameResponse => {
-            return {
-              ...comment,
-              userUsername: usernameResponse.data
-            };
-          });
-        }));
-      }
-      else {
-        throw new Error('Comments not found');
-      }
-    });
+
+    const response = await http.get(`/comment/local/${localId}`);
+    if(response.data) {
+      return Promise.all(response.data.map(async comment => {
+        const usernameResponse = await this.userApiService.getUsernameById(comment.userId);
+        return {
+          ...comment,
+          userUsername: usernameResponse
+        };
+      }));
+    }
+    else {
+      throw new Error('Comments not found');
+    }
   }
   async create(commentResource) {
-    const response = await http.post('/comments', commentResource);
+    const response = await http.post('/comment', commentResource);
     return response.data;
   }
 }

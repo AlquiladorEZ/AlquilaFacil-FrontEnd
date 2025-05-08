@@ -1,3 +1,25 @@
+<script setup>
+import { useRouter } from 'vue-router';
+import { ProfilesApiService } from '../../../profile/services/profiles-api.service';
+import { useAuthenticationStore } from '../../../auth/services/authentication.store';
+import { onMounted } from 'vue';
+
+const profilesApiService = new ProfilesApiService();
+const authenticationStore = useAuthenticationStore();
+const router = useRouter();
+
+onMounted(async () => {
+  const userId = authenticationStore.userId;
+  const bankAccounts = await profilesApiService.getBankAccountsByUserId(userId);
+  console.log(bankAccounts);
+  if (bankAccounts.bankAccountNumber.length == 0 || bankAccounts.interbankAccountNumber.length == 0) {
+    alert("No tienes cuentas bancarias registradas. Por favor, registra una cuenta bancaria para poder recibir pagos por la reserva de tu local.");
+    router.push("/control-panel");
+  }
+});
+</script>
+
+
 <template>
   <h1 class="text-3xl text-center font-semibold">Empezar a usar AlquilaFácil es muy sencillo</h1>
   <p class="text-lg text-center">Completa los siguientes pasos para registrar tu espacio en la aplicación.</p>

@@ -16,6 +16,7 @@ import { useRouter } from 'vue-router';
 import { LocalRequest } from '../model/local.request';
 import { LocalResponse } from '../model/local.response';
 import { useAuthenticationStore } from '../../auth/services/authentication.store';
+import FooterComponent from '../../public/components/Footer.component.vue';
 
 const router = useRouter();
 const authenticationStore = useAuthenticationStore();
@@ -76,7 +77,7 @@ const publishLocal = async () => {
 
 <template>
   <NavbarComponent />
-  <main class="w-full min-h-[90dvh] px-4 sm:px-8 md:px-10 lg:px-16 py-20 flex flex-col justify-center items-center gap-4">
+  <main class="w-full min-h-[80dvh] px-4 sm:px-8 md:px-10 lg:px-16 py-20 flex flex-col justify-center items-center gap-4">
     <Step1Component v-if="pageNumber === 1" />
     <button @click="changePage(1)" v-if="pageNumber === 1" class="bg-(--primary-color) text-white rounded-md px-15 py-2 mt-10 text-xl hover:bg-(--primary-color-hover) hover:cursor-pointer">Comencemos</button>
     <Step2Component v-if="pageNumber === 2" />
@@ -96,4 +97,5 @@ const publishLocal = async () => {
       <button @click="publishLocal" v-if="pageNumber === 10" class="bg-(--primary-color) text-white rounded-md px-15 py-2 mt-10 text-xl hover:bg-(--primary-color-hover) hover:cursor-pointer">Publicar local</button>
     </div>
   </main>
+  <FooterComponent />
 </template>

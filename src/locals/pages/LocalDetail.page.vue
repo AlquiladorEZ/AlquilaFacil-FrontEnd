@@ -7,22 +7,28 @@ import { LocalResponse } from '../model/local.response';
 import { ReservationRequest } from '../../booking/models/reservation.request';
 import { useAuthenticationStore } from '../../auth/services/authentication.store';
 import { ReservationsApiService } from '../../booking/services/reservations-api.service';
+import { ProfilesApiService } from '../../profile/services/profiles-api.service';
+import FooterComponent from '../../public/components/Footer.component.vue';
 
 const route = useRoute();
 const authenticationStore = useAuthenticationStore();
 
 const localsApiService = new LocalsApiService();
 const reservationsApiService = new ReservationsApiService();
+const profilesApiService = new ProfilesApiService();
 
 const local = ref({});
+const bankAccounts = ref({});
 const startDate = ref('');
 const endDate = ref('');
+const voucherImageUrl = ref('');
 const isLoaded = ref(false);
 
 onMounted(async () => {
   const id = parseInt(route.params.id);
   const response = await localsApiService.getById(id);
   local.value = new LocalResponse(response);
+  bankAccounts.value = await profilesApiService.getBankAccountsByUserId(local.value.userId);
   isLoaded.value = true; // Cuando se cargan los datos
 });
 
@@ -41,6 +47,31 @@ const isEndDateValid = computed(() => {
 });
 
 const isFormValid = computed(() => isStartDateValid.value && isEndDateValid.value);
+
+const totalAmountToPay = computed(() => {
+  if (isFormValid.value) {
+    const start = new Date(startDate.value);
+    const end = new Date(endDate.value);
+    const diffInMs = end.getTime() - start.getTime();
+    const diffInHours = diffInMs / (1000 * 60 * 60);
+    return Math.round(diffInHours * local.value.nightPrice * 100) / 100; // Redondear a 2 decimales
+  }
+  return 0.00;
+});
+
+const openUploadWidget = async () => {
+  voucherImageUrl.value = 'https://res.cloudinary.com/ducsr2p2w/image/upload/v1745502933/casa-de-playa_cwyb1z.jpg';
+
+  /*
+  try {
+    const secureUrl = await cloudinaryWidget();
+    console.log("URL segura:", secureUrl);
+    emit('update:photoUrl', secureUrl);
+  } catch (error) {
+    console.error("Error al subir imagen:", error);
+  }
+  */
+};
 
 const reserveLocal = async () => {
   try {
@@ -61,6 +92,8 @@ const reserveLocal = async () => {
       endDate: formattedEndDate,
       localId: local.value.id,
       userId: authenticationStore.userId,
+      price: totalAmountToPay.value,
+      voucherImageUrl: voucherImageUrl.value,
     });
     console.log(reservationRequest);
     await reservationsApiService.create(reservationRequest);
@@ -74,8 +107,8 @@ const reserveLocal = async () => {
 
 <template>
   <NavbarComponent />
-  <main class="px-4 sm:px-8 md:px-10 lg:px-16 py-10 w-full min-h-[90dvh] flex flex-col gap-6">
-    <h1 class="text-2xl">Detalles del local:</h1>
+  <main class="px-4 sm:px-8 md:px-10 lg:px-16 py-10 w-full min-h-[80dvh] flex flex-col gap-6">
+    <h1 class="text-3xl font-semibold">Detalles del local:</h1>
 
     <div class="w-full flex flex-col md:flex-row gap-6">
       <div class="w-full md:w-2/3 flex flex-col shadow-lg bg-white rounded-lg p-4">
@@ -93,7 +126,7 @@ const reserveLocal = async () => {
       </div>
 
       <!-- Panel lateral -->
-      <div class="flex flex-col justify-center gap-4 shadow-lg bg-white rounded-lg p-4 w-full md:w-1/3 max-h-120 overflow-y-auto">
+      <div class="flex flex-col justify-center gap-4 shadow-lg bg-white rounded-lg p-4 w-full md:w-1/3  overflow-y-auto">
         <h2 class="text-2xl font-semibold">Opciones:</h2>
         <div class="flex flex-col gap-5 text-xl">
           <RouterLink :to="`/comments/${local.id}`" class="text-[var(--primary-color)] hover:underline">
@@ -130,10 +163,21 @@ const reserveLocal = async () => {
             La fecha de fin debe ser posterior a la fecha de inicio.
           </p>
         </div>
-
+        <div v-if="isFormValid" class="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col items-center">
+          <h3 class="text-xl font-semibold mb-2">Cuenta del propietario:</h3>
+          <ul class="flex flex-col gap-2">
+            <p><span class="font-bold">Número de cuenta:</span> {{ bankAccounts.bankAccountNumber }}</p>
+            <p><span class="font-bold">Número de cuenta interbancaria:</span> {{ bankAccounts.interbankAccountNumber }}</p>
+            <p><span class="font-bold">Cantidad a depositar:</span> S/.{{ totalAmountToPay }}</p>
+          </ul>
+          <button @click="openUploadWidget" class="flex flex-col p-10 shadow-2xl hover:cursor-pointer">
+            <img src="/svgs/camera.svg" alt="camera" class="w-1/2 max-w-30 mx-auto mt-4" />
+            <span class="text-center text-gray-700 text-2xl">Adjuntar imagen del voucher</span>
+          </button>
+        </div>
         <!-- Botón -->
         <button v-if="isLoaded &&authenticationStore.userId !== local.userId"
-          :disabled="!isFormValid"
+          :disabled="!isFormValid || !voucherImageUrl"
           class="bg-[var(--secondary-color)] rounded-md py-5 text-white text-xl hover:cursor-pointer hover:bg-[var(--secondary-color-hover)] transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
           @click="reserveLocal"
         >
@@ -142,4 +186,5 @@ const reserveLocal = async () => {
       </div>
     </div>
   </main>
+  <FooterComponent />
 </template>

@@ -103,7 +103,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <ScheduleXCalendar :calendar-app="calendar" class="w-full md:w-[80%] " />
+  <ScheduleXCalendar :calendar-app="calendar" class="w-full xl:w-[80%] " />
 </template>
 
 <style>

@@ -18,14 +18,15 @@ export const useAuthenticationStore = defineStore( 'authentication', {
       try {
         const response = await authenticationService.signIn(signInRequest);
         const signInResponse = new SignInResponse(
-          response.data.id,
-          response.data.username,
-          response.data.token
+          response.id,
+          response.username,
+          response.token
         );
         this.signedIn = true;
         this.userId = signInResponse.id;
         this.username = signInResponse.username;
-        localStorage.setItem('token', signInResponse.token);  
+        localStorage.setItem('token', signInResponse.token); 
+        router.push('/');
       } catch (error) {
         console.error('Error en signIn del store:', error);
         throw new Error('Correo o contraseña incorrectos');
@@ -39,10 +40,13 @@ export const useAuthenticationStore = defineStore( 'authentication', {
         this.userId = 0;
         this.username = '';
         localStorage.removeItem('token');
-        return signUpResponse.message;
+        console.log(signUpResponse.message);
+        alert('Registro exitoso. Por favor, inicie sesión.');
+        router.push('/sign-in');
       }
       catch(error) {
         console.error(error);
+        alert('Error en el registro. Por favor, inténtelo de nuevo más tarde.');
         router.push('/sign-in');
       }
     },

@@ -2,12 +2,17 @@
 import { watch, ref } from 'vue';
 import { ProfileResponse } from '../model/profile.response';
 import EditableProfileField from './EditableProfileField.component.vue';
+import { ProfilesApiService } from '../services/profiles-api.service';
+import { useAuthenticationStore } from '../../auth/services/authentication.store';
+import { ProfileRequest } from '../model/profile.request';
 
 const props = defineProps({
   profile: Object,
 });
 
 const profileResponse = ref(null);
+const profilesApiService = new ProfilesApiService();
+const authenticationStore = useAuthenticationStore();
 
 watch(
   () => props.profile,
@@ -19,6 +24,11 @@ watch(
   { immediate: true }
 );
 
+const updateProfile = async () => {
+  const profileRequest = new ProfileRequest(profileResponse.value);
+  await profilesApiService.update(authenticationStore.userId, profileRequest);
+  alert('Perfil actualizado correctamente');  
+};
 
 </script>
 
@@ -53,6 +63,20 @@ watch(
         v-model="profileResponse.dateOfBirth"
         label="Fecha de nacimiento"
       />
+      <EditableProfileField
+        v-model="profileResponse.bankAccountNumber"
+        label="Código de cuenta bancaria"
+      />
+      <EditableProfileField
+        v-model="profileResponse.interbankAccountNumber"
+        label="Código de cuenta interbancaria"
+      />
+      <button 
+      type="button" 
+      @click="updateProfile"
+      class="bg-(--secondary-color) text-white p-4 rounded-md hover:cursor-pointer md:col-span-2">
+        Guardar cambios
+      </button>
     </form>
   </div>
 </template>

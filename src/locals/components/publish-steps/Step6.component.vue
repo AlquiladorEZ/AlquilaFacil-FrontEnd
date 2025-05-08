@@ -1,4 +1,6 @@
 <script setup>
+import { cloudinaryWidget } from '../../../shared/components/cloudinary-widget';
+
 
 const props = defineProps({
   photoUrl: String,
@@ -8,22 +10,19 @@ const emit = defineEmits([
   'update:photoUrl',
 ]);
 
-const cloudName = "ducsr2p2w"; 
-const uploadPreset = "ml_default";
 
-const widget = window.cloudinary.createUploadWidget(
-  { cloud_name: cloudName, upload_preset: uploadPreset },
-  (error, result) => {
-    if (!error && result && result.event === "success") {
-      console.log("Done! Here is the image info: ", result.info);
-      emit('update:photoUrl', result.info.secure_url);
-    }
-  }
-)
-
-const openUploadWidget = () => {
+const openUploadWidget = async () => {
   emit('update:photoUrl', 'https://res.cloudinary.com/ducsr2p2w/image/upload/v1745502933/casa-de-playa_cwyb1z.jpg');
-  //widget.open();
+
+  /*
+  try {
+    const secureUrl = await cloudinaryWidget();
+    console.log("URL segura:", secureUrl);
+    emit('update:photoUrl', secureUrl);
+  } catch (error) {
+    console.error("Error al subir imagen:", error);
+  }
+  */
 }
 
 </script>

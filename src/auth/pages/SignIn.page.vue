@@ -40,7 +40,6 @@ const signIn = async () => {
   try {
     const signInRequest = new SignInRequest(formData.value.email, formData.value.password);
     await authenticationStore.signIn(signInRequest, router);
-    router.push('/');
   } catch (error) {
     console.error('Error during sign-in:', error);
     errors.value.general = 'Correo o contraseña incorrectos.';

@@ -1,5 +1,5 @@
 export class ProfileResponse {
-  constructor({id, fullName, phone, documentNumber, dateOfBirth, userId, photoUrl}) {
+  constructor({id, fullName, phone, documentNumber, dateOfBirth, bankAccountNumber, interbankAccountNumber}) {
     this.id = id;
     this.fullName = fullName;
     this.name = fullName.split(' ')[0];
@@ -8,7 +8,7 @@ export class ProfileResponse {
     this.phone = phone;
     this.documentNumber = documentNumber;
     this.dateOfBirth = dateOfBirth;
-    this.userId = userId;
-    this.photoUrl = photoUrl;
+    this.bankAccountNumber = bankAccountNumber;
+    this.interbankAccountNumber = interbankAccountNumber;
   }
 }

@@ -2,12 +2,13 @@ import http from "@/shared/services/http-common.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export class AuthenticationService {
-  signIn(signInRequest) {
-    return http.post('/authentication/sign-in', signInRequest);
+  async signIn(signInRequest) {
+    const response = await http.post('/authentication/sign-in', signInRequest);
+    return response.data;
   }
 
-  signUp(signUpRequest) {
-    return http.post('/authentication/sign-up', signUpRequest);
+  async signUp(signUpRequest) {
+    return await http.post('/authentication/sign-up', signUpRequest);
   }
 
   async signInWithGoogle() {

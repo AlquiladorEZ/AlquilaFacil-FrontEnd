@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue';
 import { useAuthenticationStore } from '../../auth/services/authentication.store';
 import { ReportsApiService } from '../../locals/services/reports-api.service';
-import { reportsFakeData } from '../../public/data/reports';
 import { ReportResponse } from '../../locals/model/report.response';
 
 const authenticationStore = useAuthenticationStore();
@@ -11,8 +10,7 @@ const reportsApiService = new ReportsApiService();
 
 onMounted(() => {
   const userId = authenticationStore.currentUserId;
-  //reports.value = reportsApiService.getByUserId(userId);
-  reports.value = reportsFakeData.map((report) => new ReportResponse(report));
+  reports.value = reportsApiService.getByUserId(userId);
 });
 
 </script>
@@ -22,7 +20,7 @@ onMounted(() => {
     <h2 class="text-xl md:text-4xl font-bold mb-6">
       Reportes realizados
     </h2>
-    <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-18 justify-center items-center">
+    <div v-if="reports.length > 0" class="w-full grid grid-cols-1 md:grid-cols-2 gap-18 justify-center items-center">
       <div v-for="report in reports" :key="report.id" class="w-full p-10 bg-(--background-color) shadow-md rounded-lg flex items-center justify-between hover:cursor-pointer hover:shadow-2xl transition duration-300 ease-in-out">
         <div class="flex flex-col gap-4 w-full">
           <h3 class="text-xl font-semibold">Reporte ID: {{ report.id }}</h3>
@@ -35,6 +33,9 @@ onMounted(() => {
           </g>
         </svg>
       </div>
+    </div>
+    <div v-else class="w-full flex flex-col items-center justify-center gap-4">
+      <p class="text-lg text-center">No tienes reportes realizados.</p>
     </div>
   </div>
 </template>

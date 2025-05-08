@@ -36,22 +36,22 @@ const goToDistrict = (district) => {
 
 <template>
   <div class="relative flex items-center justify-center w-full h-full">
-    <div class="px-4 py-2 flex items-center justify-between  
-    w-40 sm:w-60 md:w-80 lg:w-120 xl:w-150
-    h-12 sm:h-14 rounded-lg border-2 border-[var(--background-color)]">
+    <div class="px-2 py-2 flex items-center justify-between  
+    w-full max-w-180
+    h-12 sm:h-14 rounded-lg border-2 border-[var(--background-color)] gap-1">
       <input
         v-model="query"
         type="text"
         placeholder="Buscar distrito..."
-        class="w-120 p-2 outline-0"
+        class="w-full md:p-2 outline-0"
       />
-      <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="40" viewBox="0,0,256,256">
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-8" viewBox="0,0,256,256">
       <g fill="#ffffff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.12,5.12)"><path d="M21,3c-9.37891,0 -17,7.62109 -17,17c0,9.37891 7.62109,17 17,17c3.71094,0 7.14063,-1.19531 9.9375,-3.21875l13.15625,13.125l2.8125,-2.8125l-13,-13.03125c2.55469,-2.97656 4.09375,-6.83984 4.09375,-11.0625c0,-9.37891 -7.62109,-17 -17,-17zM21,5c8.29688,0 15,6.70313 15,15c0,8.29688 -6.70312,15 -15,15c-8.29687,0 -15,-6.70312 -15,-15c0,-8.29687 6.70313,-15 15,-15z"></path></g></g>
       </svg>
     </div>
     <ul v-if="query && filteredDistricts.length > 0" 
       class="text-[var(--text-color)] absolute top-20 bg-[var(--background-color)] 
-      w-40 sm:w-60 md:w-80 lg:w-120 xl:w-150 rounded-md shadow-lg max-h-60 overflow-auto z-10"
+      w-full max-w-180 rounded-md shadow-lg max-h-60 overflow-auto z-10"
     >
       <li
         v-for="(district, index) in filteredDistricts"
