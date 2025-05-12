@@ -8,9 +8,9 @@ const authenticationStore = useAuthenticationStore();
 const reports = ref([]);
 const reportsApiService = new ReportsApiService();
 
-onMounted(() => {
+onMounted(async() => {
   const userId = authenticationStore.userId;
-  reports.value = reportsApiService.getByUserId(userId);
+  reports.value = await reportsApiService.getByUserId(userId);
 });
 
 </script>
