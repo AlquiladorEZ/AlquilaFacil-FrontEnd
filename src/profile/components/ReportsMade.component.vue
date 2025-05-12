@@ -9,7 +9,7 @@ const reports = ref([]);
 const reportsApiService = new ReportsApiService();
 
 onMounted(() => {
-  const userId = authenticationStore.currentUserId;
+  const userId = authenticationStore.userId;
   reports.value = reportsApiService.getByUserId(userId);
 });
 
