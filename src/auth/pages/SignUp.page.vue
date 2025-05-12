@@ -210,7 +210,7 @@ const goToSignIn = () => {
       <button type="button" class="bg-(--secondary-color) text-white p-4 rounded-md hover:cursor-pointer md:col-span-2" @click="goToSignIn">
         Iniciar sesión
       </button>
-
+      <!--
       <p class="text-center text-base text-white md:col-span-2">
         o regístrate con:
       </p>
@@ -219,6 +219,7 @@ const goToSignIn = () => {
         <FacebookSignUpButtonComponent />
         <GoogleSignUpButtonComponent />
       </div>
+      -->
     </form>
   </section>
 </template>
