@@ -58,7 +58,7 @@ const totalAmountToPay = computed(() => {
     const end = new Date(endDate.value);
     const diffInMs = end.getTime() - start.getTime();
     const diffInHours = diffInMs / (1000 * 60 * 60);
-    return Math.round(diffInHours * local.value.nightPrice * 100) / 100; // Redondear a 2 decimales
+    return Math.round(diffInHours * local.value.price * 100) / 100; // Redondear a 2 decimales
   }
   return 0.00;
 });
@@ -160,7 +160,7 @@ const reserveLocal = async () => {
           </div>
 
           <!-- Fechas -->
-          <div v-if="authenticationStore.userId !== local.userId" class="flex flex-col gap-5">
+          <div v-if="authenticationStore.userId !== local.userId" class="flex flex-col gap-5 text-(--text-color)">
             <div class="flex gap-4 justify-between items-center">
               <p class="text-xl">Fecha y hora de inicio:</p>
               <input
@@ -185,7 +185,7 @@ const reserveLocal = async () => {
               La fecha de fin debe ser posterior a la fecha de inicio.
             </p>
           </div>
-          <div v-if="isFormValid" class="bg-gray-100 p-4 rounded-lg mt-4 flex flex-col items-center">
+          <div v-if="isFormValid" class="bg-(--background-card-color) text-(--text-color) p-4 rounded-lg mt-4 flex flex-col items-center">
             <h3 class="text-xl font-semibold mb-2">Cuenta del propietario:</h3>
             <ul class="flex flex-col gap-2">
               <p><span class="font-bold">Número de cuenta:</span> {{ bankAccounts.bankAccountNumber }}</p>
@@ -194,7 +194,7 @@ const reserveLocal = async () => {
             </ul>
             <button @click="openUploadWidget" class="flex flex-col p-10 shadow-2xl hover:cursor-pointer">
               <img src="/svgs/camera.svg" alt="camera" class="w-1/2 max-w-30 mx-auto mt-4" />
-              <span class="text-center text-gray-700 text-2xl">Adjuntar imagen del voucher</span>
+              <span class="text-center text-(--text-color) text-2xl">Adjuntar imagen del voucher</span>
             </button>
           </div>
           <!-- Botón -->
