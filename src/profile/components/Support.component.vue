@@ -41,13 +41,21 @@ const faqs = ref([
 
 const expandedIndex = ref(null);
 
+const form = ref({
+  name: '',
+  email: '',
+  message: '',
+});
+
+const formAction = 'mailto:soporte@alquilafacil.com';
+
 const toggleFaq = (index) => {
   expandedIndex.value = expandedIndex.value === index ? null : index;
 };
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 md:px-12 lg:px-24 py-10 min-h-[80dvh]">
+  <div class="px-4 sm:px-6 md:px-12 lg:px-24 py-10 min-h-[80dvh] text-(--text-color)">
     <h3 class="text-xl font-semibold text-center mb-8">Soporte - Preguntas frecuentes</h3>
 
     <div class="max-w-3xl mx-auto space-y-4">
@@ -63,10 +71,53 @@ const toggleFaq = (index) => {
           <span class="font-medium">{{ faq.question }}</span>
         </button>
 
-        <div v-if="expandedIndex === index" class="px-6 py-4 bg-white">
+        <div v-if="expandedIndex === index" class="px-6 py-4 ">
           <p class="text-sm">{{ faq.answer }}</p>
         </div>
       </div>
     </div>
+
+    <!-- Formulario de contacto -->
+    <div class="mt-10 border-t pt-8 max-w-3xl mx-auto ">
+      <h4 class="text-lg font-semibold mb-4 text-center">¿Aún tienes dudas?</h4>
+      <p class="text-sm text-center mb-4">Envíanos tu consulta y te responderemos lo antes posible.</p>
+
+      <form
+        :action="formAction"
+        method="POST"
+        enctype="text/plain"
+        class="space-y-4 w-full"
+      >
+        <input
+          v-model="form.name"
+          type="text"
+          required
+          placeholder="Tu nombre"
+          class="w-full p-4 border border-gray-300 rounded-md"
+        />
+        <input
+          v-model="form.email"
+          type="email"
+          required
+          placeholder="Tu correo"
+          class="w-full p-4 border border-gray-300 rounded-md"
+        />
+        <textarea
+          v-model="form.message"
+          required
+          placeholder="Escribe tu mensaje aquí"
+          rows="4"
+          class="w-full p-4 border border-gray-300 rounded-md"
+        ></textarea>
+
+        <button
+          type="submit"
+          class="bg-(--secondary-color) hover:bg-(--secondary-color-hover) text-white font-semibold px-4 py-4 rounded-md transition w-full"
+        >
+          Enviar mensaje
+        </button>
+      </form>
+    </div>
+
   </div>
 </template>

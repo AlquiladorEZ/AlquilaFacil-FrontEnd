@@ -75,10 +75,10 @@ const cancelReservation = async () => {
 <template>
   <NavbarComponent />
   <main class="px-4 sm:px-8 md:px-10 lg:px-16 py-10 w-full min-h-[90dvh] flex flex-col gap-6">
-    <h1 class="text-2xl">Detalles de la reserva:</h1>
+    <h1 class="text-2xl text-(--text-color)">Detalles de la reserva:</h1>
 
-    <div class="w-full flex flex-col md:flex-row gap-6">
-      <div class="w-full md:w-2/3 flex flex-col shadow-lg bg-white rounded-lg p-4">
+    <div class="w-full flex flex-col md:flex-row gap-6 text-(--text-color)">
+      <div class="w-full md:w-2/3 flex flex-col shadow-lg bg-(--background-card-color) rounded-lg p-4">
         <img :src="local.photoUrl" alt="Imagen del local" class="w-full h-90 object-cover rounded-lg" />
         <h2 class="text-xl font-semibold mt-4">{{ local.localName }}</h2>
         <p class="text-lg mt-6">{{ `${local.streetAddress}, ${local.cityPlace}` }}</p>
@@ -148,7 +148,7 @@ const cancelReservation = async () => {
           </a>
           <button
             @click="cancelReservation"
-            class="bg-(--primary-color) rounded-md py-5 text-white text-xl hover:cursor-pointer hover:bg-red-600 transition duration-300 ease-in-out"
+            class="bg-(--primary-color) rounded-md py-5 text-white text-xl hover:cursor-pointer hover:bg-(--primary-color-hover) transition duration-300 ease-in-out"
           >Cancelar reserva</button>
         </div>
         <CreateCommentComponent :localId="local.id" v-if="new Date(reservation.endDate) < new Date() && local.userId !== userId" />

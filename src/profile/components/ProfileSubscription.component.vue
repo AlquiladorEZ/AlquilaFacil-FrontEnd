@@ -12,7 +12,7 @@ const subscriptionPlansApiService = new SubscriptionPlansApiService();
 const subscriptionStatus = ref('');
 const subscriptionPlans = ref([]);
 const router = useRouter();
-const isLoading = ref(true);
+const isLoaded = ref(false);
 
 
 onMounted(async () => {
@@ -23,7 +23,7 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error al cargar datos de suscripción:', error);
   } finally {
-    isLoading.value = false;
+    isLoaded.value = true;
   }
 });
 
@@ -36,15 +36,15 @@ const goToPurchasePage = (planId) => {
 
 <template>
   <div class="w-full p-4 flex flex-col gap-5 justify-center items-center">
-    <h2 class="text-xl md:text-4xl font-bold text-center mb-6">
+    <h2 class="text-xl md:text-4xl font-bold text-center mb-6 text-(--text-color)">
       Estado de suscripción
     </h2>
 
-    <div v-if="isLoading" class="text-center text-gray-500 py-10">
+    <div v-if="!isLoaded" class="text-center text-(--text-color) py-10">
       Cargando datos de suscripción...
     </div>
 
-    <div v-else-if="subscriptionStatus === 'No subscription found'" class="flex flex-col gap-4 justify-center items-center">
+    <div v-else-if="subscriptionStatus === 'No subscription found'" class="flex flex-col gap-4 justify-center items-center text-(--text-color)">
       <p class="text-center text-2xl">Obtén una suscripción para disfrutar de los beneficios.</p>
       <button
         v-for="plan in subscriptionPlans"
