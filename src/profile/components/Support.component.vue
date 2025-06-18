@@ -47,7 +47,13 @@ const form = ref({
   message: '',
 });
 
-const formAction = 'mailto:soporte@alquilafacil.com';
+const sendEmail = () => {
+  const subject = encodeURIComponent(`Consulta de ${form.value.name}`);
+  const body = encodeURIComponent(`Nombre: ${form.value.name}\nCorreo: ${form.value.email}\n\n${form.value.message}`);
+  const mailtoLink = `mailto:soporte@alquilafacil.com?subject=${subject}&body=${body}`;
+
+  window.location.href = mailtoLink;
+};
 
 const toggleFaq = (index) => {
   expandedIndex.value = expandedIndex.value === index ? null : index;
@@ -77,17 +83,11 @@ const toggleFaq = (index) => {
       </div>
     </div>
 
-    <!-- Formulario de contacto -->
-    <div class="mt-10 border-t pt-8 max-w-3xl mx-auto ">
+    <div class="mt-10 border-t pt-8 max-w-3xl mx-auto">
       <h4 class="text-lg font-semibold mb-4 text-center">¿Aún tienes dudas?</h4>
       <p class="text-sm text-center mb-4">Envíanos tu consulta y te responderemos lo antes posible.</p>
 
-      <form
-        :action="formAction"
-        method="POST"
-        enctype="text/plain"
-        class="space-y-4 w-full"
-      >
+      <div class="space-y-4 w-full">
         <input
           v-model="form.name"
           type="text"
@@ -111,12 +111,12 @@ const toggleFaq = (index) => {
         ></textarea>
 
         <button
-          type="submit"
+          @click="sendEmail"
           class="bg-(--secondary-color) hover:bg-(--secondary-color-hover) text-white font-semibold px-4 py-4 rounded-md transition w-full"
         >
           Enviar mensaje
         </button>
-      </form>
+      </div>
     </div>
 
   </div>

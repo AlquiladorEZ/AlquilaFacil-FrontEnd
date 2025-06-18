@@ -23,6 +23,6 @@ onMounted(() => {
     />
   </div>
   <div v-else class="w-full flex items-center justify-center">
-    <p class="text-lg">No tienes favoritos aún.</p>
+    <p class="text-lg text-(--text-color)">No tienes favoritos aún.</p>
   </div>
 </template>
