@@ -165,7 +165,7 @@ const reserveLocal = async () => {
               <p class="text-xl">Fecha y hora de inicio:</p>
               <input
                 type="datetime-local"
-                class="w-1/2 p-2 border-2 caret-[var(--color-primary)] rounded-lg"
+                class="w-1/2 p-2 border-2 caret-(--text-color) rounded-lg"
                 v-model="startDate"
               />
             </div>
@@ -177,7 +177,7 @@ const reserveLocal = async () => {
               <p class="text-xl">Fecha y hora de fin:</p>
               <input
                 type="datetime-local"
-                class="w-1/2 p-2 border-2 caret-[var(--color-primary)] rounded-lg"
+                class="w-1/2 p-2 border-2 caret-(--text-color) rounded-lg"
                 v-model="endDate"
               />
             </div>
