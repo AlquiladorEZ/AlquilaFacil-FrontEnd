@@ -13,6 +13,7 @@ import ProfileSubscriptionComponent from '../components/ProfileSubscription.comp
 import FavoritesComponent from '../components/Favorites.component.vue';
 import SubscriptionsManagementComponent from '../components/SubscriptionsManagement.component.vue';
 import SupportComponent from '../components/Support.component.vue';
+import { MetricsApiService } from '../../metrics/services/metrics-api.service.js';
 
 const router = useRouter();
 const authenticationStore = useAuthenticationStore();
@@ -20,6 +21,7 @@ const authenticationStore = useAuthenticationStore();
 const userId = ref(null);
 const profile = ref({});
 const profilesApiService = new ProfilesApiService();
+const metricsApiService = new MetricsApiService();
 
 const options = {
   modificarPerfil: 'Modificar perfil',
@@ -43,6 +45,14 @@ const toggleTheme = () => {
   const current = document.documentElement.getAttribute("data-theme");
   const newTheme = current === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-theme", newTheme);
+  if (newTheme === "dark") {
+    metricsApiService.create({
+      eventName: 'darkModeEnabled',
+      userId: authenticationStore.userId,
+      sessionId: authenticationStore.sessionId,
+    });
+  }
+
   localStorage.setItem("theme", newTheme);
 }
 

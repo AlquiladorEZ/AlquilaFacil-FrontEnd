@@ -29,7 +29,7 @@ onMounted (async () => {
     </div>
     <div v-else class="flex flex-col gap-4">
       <div v-for="notification in notifications" :key="notification.id" class="bg-(--background-color) shadow-md rounded-lg p-4">
-        <h2 class="text-lg font-semibold">{{ notification.title }}</h2>
+        <h2 class="text-lg font-semibold text-(--text-color)">{{ notification.title }}</h2>
         <p class="text-(--text-color)">{{ notification.content }}</p>
       </div>
     </div>

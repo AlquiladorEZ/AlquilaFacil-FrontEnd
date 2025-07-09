@@ -67,7 +67,7 @@ const openUploadWidget = async () => {
   try {
     const secureUrl = await cloudinaryWidget();
     console.log("URL segura:", secureUrl);
-    voucherImageUrl.value = secureUrl
+    voucherImageUrl.value = secureUrl[0]
   } catch (error) {
     console.error("Error al subir imagen:", error);
   }

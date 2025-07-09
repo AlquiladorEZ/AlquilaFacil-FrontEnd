@@ -6,6 +6,7 @@ import { SignInRequest } from '../model/sign-in.request';
 import GoogleSignInButtonComponent from '../components/GoogleSignInButton.component.vue';
 import FacebookSignInButtonComponent from '../components/FacebookSignInButton.component.vue';
 import InputFieldComponent from '../components/InputField.component.vue';
+import { MetricsApiService } from '../../metrics/services/metrics-api.service';
 
 const router = useRouter();
 const authenticationStore = useAuthenticationStore();
@@ -39,7 +40,10 @@ const signIn = async () => {
 
   try {
     const signInRequest = new SignInRequest(formData.value.email, formData.value.password);
+
     await authenticationStore.signIn(signInRequest, router);
+    const userId = authenticationStore.userId;
+
   } catch (error) {
     console.error('Error during sign-in:', error);
     errors.value.general = 'Correo o contraseña incorrectos.';

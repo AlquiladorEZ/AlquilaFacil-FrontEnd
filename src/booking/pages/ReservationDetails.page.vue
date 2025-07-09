@@ -30,7 +30,9 @@ const isFormValid = computed(() => postponeMinutes.value >= 10 && postponeMinute
 onMounted(async() => {
   reservation.value = JSON.parse(localStorage.getItem('reservation'));
   const localResponse = await localsApiService.getById(reservation.value.localId);
+  console.log('Local Response:', localResponse);
   local.value = new LocalResponse(localResponse);
+  console.log('Local:', local.value);
   userUsername.value = await usersApiService.getUsernameById(reservation.value.userId);
   localStorage.removeItem('reservation');
 });
@@ -79,9 +81,14 @@ const cancelReservation = async () => {
 
     <div class="w-full flex flex-col md:flex-row gap-6 text-(--text-color)">
       <div class="w-full md:w-2/3 flex flex-col shadow-lg bg-(--background-card-color) rounded-lg p-4">
-        <img :src="local.photoUrl" alt="Imagen del local" class="w-full h-90 object-cover rounded-lg" />
+        <template v-if="!local.photoUrls">
+          <p class="text-xl text-center">No hay imágenes disponibles para este local.</p>
+        </template>
+        <template v-else-if="Array.isArray(local.photoUrls) && local.photoUrls.length > 0">
+        <img :src="local.photoUrls[0]" alt="Imagen del local" class="w-full h-90 object-cover rounded-lg" />
+        </template>
         <h2 class="text-xl font-semibold mt-4">{{ local.localName }}</h2>
-        <p class="text-lg mt-6">{{ `${local.streetAddress}, ${local.cityPlace}` }}</p>
+        <p class="text-lg mt-6">{{ `${local.address}` }}</p>
         <p v-if="local.userId === userId" class="mt-3 text-xl"><span class="font-semibold">Arrendador de tu espacio: </span>{{ userUsername }}</p>
         <p v-else class="mt-3 text-xl"><span class="font-semibold">Propietario: </span>{{ local.userUsername }}</p>
 
@@ -98,7 +105,7 @@ const cancelReservation = async () => {
       </div>
 
       <!-- Panel lateral -->
-      <div class="flex flex-col justify-center gap-4 shadow-lg bg-white rounded-lg p-4 w-full md:w-1/3 max-h-180 overflow-y-auto">
+      <div class="flex flex-col justify-center gap-4 shadow-lg bg-(--background-card-color) rounded-lg p-4 w-full md:w-1/3 max-h-180 overflow-y-auto">
         <h2 class="text-2xl font-semibold">Opciones:</h2>
         <div class="flex flex-col gap-5 text-xl">
           <RouterLink :to="`/comments/${local.id}`" class="text-[var(--primary-color)] hover:underline">

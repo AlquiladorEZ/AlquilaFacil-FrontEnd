@@ -60,7 +60,7 @@ const goToPurchasePage = (planId) => {
       </button>
     </div>
 
-    <div v-else-if="subscriptionStatus === 'Pending'" class="flex flex-col gap-4 justify-center items-center">
+    <div v-else-if="subscriptionStatus === 'Pending'" class="flex flex-col gap-4 justify-center items-center text-(--text-color)">
       <p class="text-center text-2xl">Tu suscripción está pendiente de validación.</p>
       <p class="text-lg font-semibold text-center">Tu plan es: {{ subscriptionPlans[0].name }}</p>
       <img src="https://www.supercoloring.com/sites/default/files/fif/2017/05/gold-star-paper-craft.png" alt="Plan Image" class="w-32 h-32 object-cover rounded-lg" />
@@ -68,7 +68,7 @@ const goToPurchasePage = (planId) => {
       <p class="text-lg font-semibold text-center">Tu voucher será validado para culminar la compra de tu suscripción.</p>
     </div>
 
-    <div v-else-if="subscriptionStatus === 'Active'" class="flex flex-col gap-4 justify-center items-center">
+    <div v-else-if="subscriptionStatus === 'Active'" class="flex flex-col gap-4 justify-center items-center text-(--text-color)">
       <p class="text-center text-2xl">Tu suscripción está activa.</p>
       <p class="text-lg font-semibold text-center">Tu plan es: {{ subscriptionPlans[0].name }}</p>
       <img src="https://www.supercoloring.com/sites/default/files/fif/2017/05/gold-star-paper-craft.png" alt="Plan Image" class="w-32 h-32 object-cover rounded-lg" />

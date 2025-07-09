@@ -2,16 +2,19 @@ import {AuthenticationService} from "./authentication.service.js";
 import {defineStore} from "pinia";
 import {SignInResponse} from "@/auth/model/sign-in.response.js";
 import {SignUpResponse} from "@/auth/model/sign-up.response.js";
+import { MetricsApiService } from "../../metrics/services/metrics-api.service.js";
 
 const authenticationService = new AuthenticationService();
+const metricsApiService = new MetricsApiService();
 
 export const useAuthenticationStore = defineStore( 'authentication', {
-  state: () => ({ signedIn: false, userId: 0, username: ''}),
+  state: () => ({ signedIn: false, userId: 0, username: '', sessionId: '' }),
   getters: {
     isSignedIn: (state) => state['signedIn'],
     currentUserId: (state) => state['userId'],
     currentUsername: (state) => state['username'],
-    currentToken: () => localStorage.getItem('token')
+    currentToken: () => localStorage.getItem('token'),
+    currentSessionId: (state) => state['sessionId']
   },
   actions: {
     async signIn(signInRequest, router) {
@@ -25,7 +28,9 @@ export const useAuthenticationStore = defineStore( 'authentication', {
         this.signedIn = true;
         this.userId = signInResponse.id;
         this.username = signInResponse.username;
+        this.sessionId = new Date().toISOString();
         localStorage.setItem('token', signInResponse.token); 
+        metricsApiService.create({ eventName: 'signIn', userId: this.userId, sessionId: this.sessionId });
         router.push('/');
       } catch (error) {
         console.error('Error en signIn del store:', error);
@@ -102,10 +107,13 @@ export const useAuthenticationStore = defineStore( 'authentication', {
       
     },
     async signOut(router) {
+      await metricsApiService.create({ eventName: 'signOut', userId: this.userId, sessionId: this.sessionId });
+
       this.signedIn = false;
       this.userId = 0;
       this.username = '';
       localStorage.removeItem('token');
+      this.sessionId = '';
       router.push('/sign-in');
     }
   },
