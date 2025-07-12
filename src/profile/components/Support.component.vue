@@ -50,7 +50,7 @@ const form = ref({
 const sendEmail = () => {
   const subject = encodeURIComponent(`Consulta de ${form.value.name}`);
   const body = encodeURIComponent(`Nombre: ${form.value.name}\nCorreo: ${form.value.email}\n\n${form.value.message}`);
-  const mailtoLink = `mailto:soporte@alquilafacil.com?subject=${subject}&body=${body}`;
+  const mailtoLink = `mailto:alquilafacilperu@gmail.com?subject=${subject}&body=${body}`;
 
   window.location.href = mailtoLink;
 };
